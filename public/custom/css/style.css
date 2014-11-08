@@ -11,6 +11,10 @@
     padding-right:20px;
 }
 
+.textSwap {
+    color:blue;
+}
+
 @font-face {
         font-family: lato;
         src: url("/public/custom/font/lato/Lato-Reg.ttf") format("opentype");

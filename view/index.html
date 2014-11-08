@@ -1,7 +1,13 @@
 {% extends 'layout.html' %}
 {% block body %}
 <div class="container-wide" ng-controller="homeCtrl">
+    <h3>
+        [[message]]
+    </h3>
+    <span id="swap" class="textSwap">[[swap]]</span>
     <form id="loginForm" ng-show="!newAccount">
+      <span>
+      </span>
       <p>
         <label>Username:
           <input type="text" name="username" value="test" />
@@ -22,25 +28,23 @@
    <p>
       <label>Username:
         <input type="text" name="username" value="test" />
-        <span>{{createError}}</span>
+        <span>[[createError]]</span>
       </label>
     </p>
     <p>
       <label>Password:
-        <input type="password" name="password" value="test" />
+        <input type="password" id="pw" name="password" value="test" />
       </label>
     </p>
     <p>
       <label> Repeat Password:
-        <input type="password" name="repeatPassword" value="test" />
+        <input type="password" id="rpw" name="repeatPassword" value="test" />
       </label>
     </p>
     <p>
       <input type="button" id="createAccount" value="Sign Up"></input>
     </p>
   </form>
-
-  <div id="switch">Create Account</div>
 </div>
 {% endblock %}
 
@@ -49,15 +53,19 @@
 function homeCtrl($scope, $http) {
   $scope.createError = "";
   $scope.newAccount = false;
+  $scope.message = "Log In";
+  $scope.swap = "Create an account."
 
-  $("#switch").click(function() {
-    if (!$scope.newAccount) {
-      $("#switch").text("Just Log in.");
-    }
-    else {
-      $("#switch").text("Create Account."); 
-    }
+  $("#swap").click(function() {
     $scope.$apply(function(){
+        if (!$scope.newAccount) {
+          $scope.message = "Create New Account";
+          $scope.swap = "log in"
+        }
+        else {
+          $scope.message = "Log In";
+          $scope.swap = "Create new account"
+        }
         $scope.newAccount = !$scope.newAccount;
     });
   });
@@ -77,7 +85,13 @@ function homeCtrl($scope, $http) {
     })
   });
 
-  $("createAccount").click(function() {
+  $("#createAccount").click(function() {
+    if ($("#pw").value != $("#rpw")) {
+      $scope.$apply(function(){
+        $scope.createError = "Passwords do not match."
+      })
+    }
+    else {
       $.ajax({
         url: "/api/createAccount",
         method: "POST",
@@ -87,17 +101,17 @@ function homeCtrl($scope, $http) {
             // redirect to login page
           }
           else {
-            $scope.createError = "Username not available."
+            $scope.$apply(function(){
+              $scope.createError = "Username not available.";
+            })
           }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
 
-        }
-        
+        },
       })
-    });
-
-
+    }
+  });
 }
 </script>
 {% endblock %}
