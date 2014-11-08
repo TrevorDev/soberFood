@@ -25,6 +25,19 @@ var User = require("./model/user");
 co(function*(){
     
     si = database.getSequelizeInstance()
+
+// var FoodInfo = require("./model/foodInfo");
+// FoodInfo.create({name: "Bananas", shelfLifeDays: 10})
+// FoodInfo.create({name: "Tomatoes", shelfLifeDays: 10})
+// FoodInfo.create({name: "Milk", shelfLifeDays: 14})
+// FoodInfo.create({name: "White Bread", shelfLifeDays: 21})
+// FoodInfo.create({name: "Apples", shelfLifeDays: 30})
+// FoodInfo.create({name: "Breakfast Cereal", shelfLifeDays: 300})
+// FoodInfo.create({name: "Potatoes", shelfLifeDays: 90})
+// FoodInfo.create({name: "Eggs", shelfLifeDays: 28})
+// FoodInfo.create({name: "Orange Juice", shelfLifeDays: 21})
+// FoodInfo.create({name: "Chicken breast", shelfLifeDays: 2})
+// FoodInfo.create({name: "Turkey - From Deli Counter", shelfLifeDays: 3})
     //yield si.sync({ force: true })
     // var User = require("./model/user");
     // var College = require("./model/college");
@@ -92,7 +105,7 @@ function defaultPageLoad(pageName, requiresLogin) {
 			this.redirect('/')
 			return
 		}
-        var temp = {};
+        var temp = {userId: this.session.userId};
         this.body = yield render(pageName, temp)
     }
 }

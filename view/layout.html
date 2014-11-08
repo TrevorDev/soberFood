@@ -71,8 +71,14 @@
         	<ul class="nav navbar-nav">
             <li class="active"><a href="/browse">ONE</a></li>
             <li class="active"><a href="/create">TWO</a></li>
-            {% if email %}
-            <li class="active"><a href="/dashboard">Dashboard</a></li>
+            {% if userId %}
+            <li class="active"><a href="/shoppingList">Shopping List</a></li>
+            <li class="active"><a href="/currenItems">Food To Eat</a></li>
+            {% endif %}
+          </ul>
+          <ul class="nav navbar-nav pull-right">
+            {% if userId %}
+            <li class="active"><a href="/api/logout">Logout</a></li>
             {% endif %}
           </ul>
           <!--<ul class="nav navbar-nav navbar-right">
