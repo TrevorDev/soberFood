@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="container-wide" ng-controller="homeCtrl">
+	<div style="width:100%">
+	<form action="demo_form.asp" method="get">
+	<input list="foodItems" name="foodItem">
+	<datalist id="foodItems">
+		<option  data-ng-repeat="ttl in foodItems" value="[[ttl]]">
+	</datalist>
+	<input type="submit">
+	</form>
+	</div>
+	<h1>HELLO WORLD!</h1>
+	<div ng-repeat="item in project">
+		[[item]]
+	</div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+function homeCtrl($scope, $http) {
+	$scope.project = ["Hello", "World", "!"];
+	$scope.foodItems = ["Bananas", "Tomatoes", "Milk", "White Bread", "Apples", "Breakfast Cereal", "Potatoes", "Eggs", "Orange Juice", "Chicken breast", "Turkey from Deli Counter"]
+}
+</script>
+{% endblock %}

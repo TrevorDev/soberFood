@@ -61,6 +61,7 @@ auth.setRoutes(app);
 
 //DEFAULTS
 app.get('/', defaultPageLoad('index'))
+app.get('/shoppingList', defaultPageLoad('shoppingList'))
 app.get(/\/public\/*/, serve('.'))
 
 //SECURE
