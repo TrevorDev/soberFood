@@ -1,10 +1,28 @@
 {% extends 'layout.html' %}
 {% block body %}
 <div class="container-wide" ng-controller="homeCtrl">
-	<form action="/login" method="post">
-    <p>
+    <form id="loginForm" ng-show="!newAccount">
+      <p>
+        <label>Username:
+          <input type="text" name="username" value="test" />
+        </label>
+      </p>
+      <p>
+        <label>Password:
+          <input type="password" name="password" value="test" />
+        </label>
+      </p>
+      <p>
+        <input type="button" id="logIn" value="Log In"></input>
+      </p>
+    </form>
+  </form>
+
+  <form id="createAccountForm" ng-show="newAccount">
+   <p>
       <label>Username:
         <input type="text" name="username" value="test" />
+        <span>{{createError}}</span>
       </label>
     </p>
     <p>
@@ -13,24 +31,72 @@
       </label>
     </p>
     <p>
-      <button type="submit">Log In</button>
+      <label> Repeat Password:
+        <input type="password" name="repeatPassword" value="test" />
+      </label>
     </p>
     <p>
-      <a href="/auth/facebook">Sign in with Facebook</a> <a href="/auth/twitter">Sign in with Twitter</a> <a href="/auth/google">Sign in with Google</a>
+      <input type="button" id="createAccount" value="Sign Up"></input>
     </p>
   </form>
 
-	<h1>HELLO WORLD!</h1>
-	<div ng-repeat="item in project">
-		[[item]]
-	</div>
+  <div id="switch">Create Account</div>
 </div>
 {% endblock %}
 
 {% block script %}
 <script type="text/javascript">
 function homeCtrl($scope, $http) {
-	$scope.project = ["Hello", "World", "!"];
+  $scope.createError = "";
+  $scope.newAccount = false;
+
+  $("#switch").click(function() {
+    if (!$scope.newAccount) {
+      $("#switch").text("Just Log in.");
+    }
+    else {
+      $("#switch").text("Create Account."); 
+    }
+    $scope.$apply(function(){
+        $scope.newAccount = !$scope.newAccount;
+    });
+  });
+
+  $("#signIn").click(function() {
+      $.ajax({
+        url: "/api/login",
+        method: "POST",
+        success: function(data) {
+          // redirect
+        }
+
+//        error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+  //      }
+    })
+  });
+
+  $("createAccount").click(function() {
+      $.ajax({
+        url: "/api/createAccount",
+        method: "POST",
+
+        success: function(data) {
+          if (data.success) {
+            // redirect to login page
+          }
+          else {
+            $scope.createError = "Username not available."
+          }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+        }
+        
+      })
+    });
+
+
 }
 </script>
 
