@@ -56,7 +56,7 @@ app.use(router(app))
 
 //DEFAULTS
 app.get('/', defaultPageLoad('index'))
-app.get('/shoppingList', defaultPageLoad('shoppingList'))
+app.get('/shoppingList', defaultPageLoad('shoppingList', true))
 app.get(/\/public\/*/, serve('.'))
 
 app.post('/api/login', function*(){
@@ -67,6 +67,7 @@ app.post('/api/login', function*(){
         this.session.userId = userId;
         this.jsonResp(200)
     }else{
+        this.session = null;
         this.jsonResp(401)
     }
 });
@@ -87,10 +88,10 @@ app.post('/api/createAccount', function * () {
 //PAGE HANDLERS ---------------------------------------------------------------------------------------------------------------------
 function defaultPageLoad(pageName, requiresLogin) {
     return function * () {
-        /*if(requiresLogin===true && !sessionHelper.isLoggedIn(this.session)){
-			this.redirect('/login')
+        if(requiresLogin===true && !this.session.userId){
+			this.redirect('/')
 			return
-		}*/
+		}
         var temp = {};
         this.body = yield render(pageName, temp)
     }
