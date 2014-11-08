@@ -1,5 +1,5 @@
 var config = require('./lib/config')
-    //var database = require('./lib/database')
+var database = require('./lib/database')
 var logger = require('koa-logger')
 var router = require('koa-router')
 var serve = require('koa-static')
@@ -19,9 +19,25 @@ var app = koa()
 var auth = require('./lib/auth.js');
 var bodyParser = require('koa-bodyparser')
 var session = require('koa-generic-session')
+
+var co = require('co')
 //Add database
-// si = database.getSequelizeInstance()
-//si.sync()
+
+
+co(function*(){
+    
+    si = database.getSequelizeInstance()
+    // yield si.sync({ force: true })
+    // var User = require("./model/user");
+    // var Colledge = require("./model/colledge");
+    // User.create({name: "tesvo", password: "blah"})
+    // Colledge.create({name: "Software Engineering"})
+    // Colledge.create({name: "Computer Science"})
+    // Colledge.create({name: "Food Science"})
+    // Colledge.create({name: "Biology"})
+    // console.log("hit")
+})()
+
 
 //var userCtrl = require('./controller/user')
 

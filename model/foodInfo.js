@@ -2,13 +2,14 @@ var database = require('./../lib/database');
 var sequelize = require('sequelize');
 var si = database.getSequelizeInstance();
 
-var User = si.define('User', 
+var FoodInfo = si.define('FoodInfo', 
 	{
 	  name: {
 	  	type:sequelize.STRING,
 	  	unique: true
 	  },
-	  password: sequelize.STRING
+	  shelfLifeDays: sequelize.INTEGER,
+	  calories: sequelize.INTEGER
 	}, {
 		classMethods: {
 
@@ -18,7 +19,4 @@ var User = si.define('User',
 		}
 	}
 )
-
-
-module.exports = User;
-
+module.exports = FoodInfo;
