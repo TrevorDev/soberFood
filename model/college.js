@@ -2,7 +2,7 @@ var database = require('./../lib/database');
 var sequelize = require('sequelize');
 var si = database.getSequelizeInstance();
 
-var Colledge = si.define('Colledge', 
+var College = si.define('College', 
 	{
 	  name: {
 	  	type:sequelize.STRING,
@@ -18,4 +18,4 @@ var Colledge = si.define('Colledge',
 	}
 )
 
-module.exports = Colledge;
+module.exports = College;

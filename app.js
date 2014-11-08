@@ -29,13 +29,16 @@ co(function*(){
     si = database.getSequelizeInstance()
     // yield si.sync({ force: true })
     // var User = require("./model/user");
-    // var Colledge = require("./model/colledge");
+    // var College = require("./model/college");
+    // var FoodInfo = require("./model/foodInfo");
+    // FoodInfo.create({name: "Orange", shelfLifeDays: "3"});
     // User.create({name: "tesvo", password: "blah"})
-    // Colledge.create({name: "Software Engineering"})
-    // Colledge.create({name: "Computer Science"})
-    // Colledge.create({name: "Food Science"})
-    // Colledge.create({name: "Biology"})
+    // College.create({name: "Software Engineering"})
+    // College.create({name: "Computer Science"})
+    // College.create({name: "Food Science"})
+    // College.create({name: "Biology"})
     // console.log("hit")
+
 })()
 
 
