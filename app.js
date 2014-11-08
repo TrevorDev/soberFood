@@ -5,7 +5,6 @@ var router = require('koa-router')
 var serve = require('koa-static')
 //var session = require('koa-session')
 var views = require('co-views')
-var parse = require('co-body')
 var jsonResp = require('koa-json-response')
 var koa = require('koa')
 var swig = require('swig')
@@ -13,21 +12,20 @@ var https = require('https')
 var http = require('http')
 var request = require('request');
 var fs = require('fs')
-var passport = require('koa-passport'),
-    LocalStrategy = require('passport-local').Strategy;
 var app = koa()
 var auth = require('./lib/auth.js');
 var bodyParser = require('koa-bodyparser')
 var session = require('koa-generic-session')
+var parse = require('co-body');
 
 var co = require('co')
 //Add database
 
-
+var User = require("./model/user");
 co(function*(){
     
     si = database.getSequelizeInstance()
-    // yield si.sync({ force: true })
+    yield si.sync({ force: true })
     // var User = require("./model/user");
     // var College = require("./model/college");
     // var FoodInfo = require("./model/foodInfo");
@@ -49,25 +47,35 @@ swig.setDefaults(config.templateOptions)
 app.keys = ['your-session-secret']
 app.use(session())
 app.use(bodyParser())
-app.use(passport.initialize())
-app.use(passport.session())
 app.use(jsonResp())
 app.use(router(app))
 
 //ROUTES --------------------------------------------------------------------------------------------------------------------
 
 //AUTH
-auth.setRoutes(app);
 
 //DEFAULTS
 app.get('/', defaultPageLoad('index'))
 app.get('/shoppingList', defaultPageLoad('shoppingList'))
 app.get(/\/public\/*/, serve('.'))
+app.post('/api/login', function*(){
+    console.log("blah")
+    //yield User.authenticate("", "");
+    var params = yield parse.json(this)
+    console.log("fdsfs"+params)
+
+});
+
+app.get('/api/logout', function * (next) {
+    this.logout()
+    this.redirect('/')
+})
+
 
 //SECURE
 var secured = new router()
 app.use(function*(next) {
-	console.log(this.session)
+	//console.log(this.session)
   if (this.isAuthenticated()) {
     yield next
   } else {

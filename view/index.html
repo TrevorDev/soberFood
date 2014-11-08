@@ -13,7 +13,7 @@
         </label>
       </p>
       <p>
-        <input type="button" id="logIn" value="Log In"></input>
+        <input type="button" id="signIn" value="Log In"></input>
       </p>
     </form>
   </form>
@@ -66,8 +66,9 @@ function homeCtrl($scope, $http) {
       $.ajax({
         url: "/api/login",
         method: "POST",
+        data: $('#loginForm').serialize(),
         success: function(data) {
-          // redirect
+          window.location="/shoppingList";
         }
 
 //        error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -98,10 +99,5 @@ function homeCtrl($scope, $http) {
 
 
 }
-</script>
-
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io();
 </script>
 {% endblock %}
