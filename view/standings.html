@@ -33,13 +33,18 @@ function homeCtrl($scope, $http) {
 	$scope.itemsOnList = [];
 
 	$.ajax({
-        url: "/api/user/statistics",
+        url: "/api/college/statistics",
         method: "Get",
         success: function(resp) {
         	console.log(resp)
         	$scope.itemsOnList = (resp.data)
         	$.each($scope.itemsOnList, function(index, elem) {
-        		elem.percentage = Math.round((elem.wasted / (elem.eaten + elem.wasted)) * 1000) / 10;
+            if (elem.eaten + elem.wasted > 0) {
+        		  elem.percentage = Math.round((elem.wasted / (elem.eaten + elem.wasted)) * 1000) / 10;
+            }
+            else {
+              elem.percentage = 0;
+            }
         	})
 
           
