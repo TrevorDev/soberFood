@@ -1,19 +1,41 @@
 {% extends 'layout.html' %}
 {% block body %}
-<div class="row">
-  <div class="col-md-8">
-    Dont Let Your Food Get Wasted!
-  </div>
-  <div class="col-md-4">
-    <div class="container-wide" ng-controller="homeCtrl">
-        <h3>
-            [[message]]
-        </h3>
-        <span id="swap" class="textSwap">[[swap]]</span>
-        <form id="loginForm" ng-show="!newAccount">
-          <span>
-          </span>
-          <p>
+<!--<img src="../public/custom/img/apple.jpg"> -->
+<div class="login">
+  <div class="row">
+    <div class="col-md-3">
+      <h2>
+        Dont Let Your Food Get Wasted!
+      </h2>
+    </div>
+    <div class="col-md-4">
+      <div class="container-wide" ng-controller="homeCtrl">
+          <h3>
+              [[message]]
+          </h3>
+          <span id="swap" class="textSwap">[[swap]]</span>
+          <form id="loginForm" ng-show="!newAccount">
+            <span>
+            </span>
+            <p>
+              <label>Username:
+                <input type="text" name="name" value="test" />
+                <span>[[createError]]</span>
+              </label>
+            </p>
+            <p>
+              <label>Password:
+                <input type="password" name="password" value="test" />
+              </label>
+            </p>
+            <p>
+              <input type="button" id="signIn" value="Log In"></input>
+            </p>
+          </form>
+        </form>
+
+        <form id="createAccountForm" ng-show="newAccount">
+         <p>
             <label>Username:
               <input type="text" name="name" value="test" />
               <span>[[createError]]</span>
@@ -21,40 +43,32 @@
           </p>
           <p>
             <label>Password:
-              <input type="password" name="password" value="test" />
+              <input type="password" id="pw" name="password" value="test" />
             </label>
           </p>
           <p>
-            <input type="button" id="signIn" value="Log In"></input>
+            <label> Repeat Password:
+              <input type="password" id="rpw" name="repeatPassword" value="test" />
+            </label>
+          </p>
+          <p>
+            <input type="button" id="createAccount" value="Sign Up"></input>
           </p>
         </form>
-      </form>
-
-      <form id="createAccountForm" ng-show="newAccount">
-       <p>
-          <label>Username:
-            <input type="text" name="name" value="test" />
-            <span>[[createError]]</span>
-          </label>
-        </p>
-        <p>
-          <label>Password:
-            <input type="password" id="pw" name="password" value="test" />
-          </label>
-        </p>
-        <p>
-          <label> Repeat Password:
-            <input type="password" id="rpw" name="repeatPassword" value="test" />
-          </label>
-        </p>
-        <p>
-          <input type="button" id="createAccount" value="Sign Up"></input>
-        </p>
-      </form>
-    </div>
-
+      </div>
   </div>
 </div>
+<!--<div class="row">
+  <div class="col-md-4">
+    Meal Exchange
+  </div>
+  <div class="col-md-4">
+    Sponsors
+  </div>
+  <div class="col-md-4">
+    Prizes
+  </div> -->
+</div> 
 {% endblock %}
 
 {% block script %}
