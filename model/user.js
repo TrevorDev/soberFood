@@ -1,5 +1,6 @@
 var database = require('./../lib/database');
 var sequelize = require('sequelize');
+var crypto = require('./../lib/crypto');
 var si = database.getSequelizeInstance();
 
 var User = si.define('User', 
@@ -13,18 +14,22 @@ var User = si.define('User',
 		classMethods: {
 	    	createEncrypted: function*(attributes){ 
 	    		return yield User.create({
-									  email: attributes.email,
+									  name: attributes.name,
 									  password: yield crypto.crypt(attributes.password)
 									})
 			},
-			authenticate: function*(email, password){
-				var user = yield User.find({where: {name: email}});
-				// if(yield crypto.compareStringHash(password, user.password)){
-				// 	return user.id;
-				// }else{
-				// 	return 0;
-				// }
-				return 0;
+			authenticate: function*(name, password){
+				var user = yield User.find({where: {name: name}});
+				var matched = false;
+				if(user){
+					matched = yield crypto.compareStringHash(password, user.password)
+				}
+
+				if(matched){
+					return user.id;
+				}else{
+					return 0;
+				}
 			}
 		},
 		instanceMethods: {

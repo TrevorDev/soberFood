@@ -25,7 +25,7 @@ var User = require("./model/user");
 co(function*(){
     
     si = database.getSequelizeInstance()
-    yield si.sync({ force: true })
+    //yield si.sync({ force: true })
     // var User = require("./model/user");
     // var College = require("./model/college");
     // var FoodInfo = require("./model/foodInfo");
@@ -58,34 +58,28 @@ app.use(router(app))
 app.get('/', defaultPageLoad('index'))
 app.get('/shoppingList', defaultPageLoad('shoppingList'))
 app.get(/\/public\/*/, serve('.'))
+
 app.post('/api/login', function*(){
-    console.log("blah")
-    //yield User.authenticate("", "");
-    var params = yield parse.json(this)
-    console.log("fdsfs"+params)
-
+    var name = this.request.body.name;
+    var password = this.request.body.password;
+    var userId = yield User.authenticate(name, password);
+    if(userId){
+        this.session.userId = userId;
+        this.jsonResp(200)
+    }else{
+        this.jsonResp(401)
+    }
 });
-
-app.get('/api/logout', function * (next) {
-    this.logout()
+app.get('/api/logout', function * () {
+    this.session = null
     this.redirect('/')
 })
-
-
-//SECURE
-var secured = new router()
-app.use(function*(next) {
-	//console.log(this.session)
-  if (this.isAuthenticated()) {
-    yield next
-  } else {
-    this.redirect('/')
-  }
+app.post('/api/createAccount', function * () {
+    var user = yield User.createEncrypted(this.request.body);
+    this.session.userId = user.id;
+    this.jsonResp(200)
 })
 
-secured.get('/account',defaultPageLoad('account'))
-
-app.use(secured.middleware())
 
 //API ROUTES
 //app.get('/testUser', userCtrl.getUsers)

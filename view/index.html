@@ -4,7 +4,7 @@
     <form id="loginForm" ng-show="!newAccount">
       <p>
         <label>Username:
-          <input type="text" name="username" value="test" />
+          <input type="text" name="name" value="test" />
         </label>
       </p>
       <p>
@@ -21,7 +21,7 @@
   <form id="createAccountForm" ng-show="newAccount">
    <p>
       <label>Username:
-        <input type="text" name="username" value="test" />
+        <input type="text" name="name" value="test" />
         <span>{{createError}}</span>
       </label>
     </p>
@@ -77,11 +77,12 @@ function homeCtrl($scope, $http) {
     })
   });
 
-  $("createAccount").click(function() {
+  $("#createAccount").click(function() {
+    console.log("jhdfsgasd")
       $.ajax({
         url: "/api/createAccount",
         method: "POST",
-
+        data: $('#createAccountForm').serialize(),
         success: function(data) {
           if (data.success) {
             // redirect to login page
