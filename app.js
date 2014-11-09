@@ -26,6 +26,7 @@ var FoodInfo = require("./model/foodInfo");
 
 var foodItemCtrl = require("./controller/foodItem");
 var userCtrl = require("./controller/user");
+var collegeCtrl = require("./controller/college");
 co(function*(){
     
     si = database.getSequelizeInstance()
@@ -76,6 +77,7 @@ app.get('/', defaultPageLoad('index'))
 app.get('/shoppingList', defaultPageLoad('shoppingList', true))
 app.get('/foodToEat', defaultPageLoad('foodToEat', true))
 app.get('/statistics', defaultPageLoad('results', true))
+app.get('/standings', defaultPageLoad('standings', true))
 app.get(/\/public\/*/, serve('.'))
 
 app.post('/api/foodItem', foodItemCtrl.add)
@@ -85,6 +87,7 @@ app.put('/api/foodItem/waste/:id', foodItemCtrl.waste)
 app.get('/api/user/list', userCtrl.getList)
 app.get('/api/user/pantry', userCtrl.getPantry)
 app.get('/api/user/statistics', userCtrl.getStatistics)
+app.get('/api/college/statistics', collegeCtrl.getStatistics)
 
 app.get('/api/foodInfo', function*(){
     var ret = yield FoodInfo.findAll();
