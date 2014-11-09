@@ -3,22 +3,21 @@
 <div class="container-wide" ng-controller="homeCtrl">
 	<div style="width:100%">
 	
-	<h1>Where Are You Wasting?</h1>
+	<h1>Student Leaders!</h1>
+  <h3>Top 10 Students</h3>
 
 	<table class="table table-striped">
       <thead>
         <tr>
-          <th>Statistic</th>
-          <th>Total Eaten</th>
-          <th>Total Wasted</th>
+          <th>Name</th>
+          <th>Total Score</th>
           <th>Percentage Wasted</th>
         </tr>
       </thead>
       <tbody>
         <tr ng-repeat="item in itemsOnList">
           <td>[[item.name]]</td>
-          <td>[[item.eaten]]</td>
-          <td>[[item.wasted]]</td>
+          <td>[[item.score]]</td>
           <td>[[item.percentage]]%</td>
         </tr>
       </tbody>
@@ -33,14 +32,21 @@ function homeCtrl($scope, $http) {
 	$scope.itemsOnList = [];
 
 	$.ajax({
-        url: "/api/user/statistics",
+        url: "/api/user/leaderboard",
         method: "Get",
         success: function(resp) {
         	console.log(resp)
         	$scope.itemsOnList = (resp.data)
         	$.each($scope.itemsOnList, function(index, elem) {
-        		elem.percentage = Math.round((elem.wasted / (elem.eaten + elem.wasted)) * 1000) / 10;
+            if (elem.eaten + elem.wasted > 0) {
+        		  elem.percentage = Math.round((elem.wasted / (elem.eaten + elem.wasted)) * 1000) / 10;
+            }
+            else {
+              elem.percentage = 0;
+            }
         	})
+
+          
         	$scope.$apply();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
