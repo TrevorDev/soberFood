@@ -6,24 +6,33 @@ var sequelize = require('sequelize');
 var si = database.getSequelizeInstance();
 
 exports.getStatistics = function *() {
-	colleges = yield College.findAll()
+	
 	list = []
-	for (var i = 0; i < colleges.length;i++) {
-		var college = colleges[i].name;
-		var eaten = yield si.query('select count(*) as num from soberFood.Colleges' +
-	' inner join soberFood.Users on soberFood.Users.CollegeId = soberFood.Colleges.id' +
-	' inner join soberFood.FoodItems on soberFood.Users.id = soberFood.FoodItems.userId' +
-	' where soberFood.Colleges.id = ' + colleges[i].id + ' and soberFood.FoodItems.Status' +
-	' = "EATEN";', null, { raw: true }) 		
 
-		var wasted = yield si.query('select count(*) as num from soberFood.Colleges' +
-	' inner join soberFood.Users on soberFood.Users.CollegeId = soberFood.Colleges.id' +
-	' inner join soberFood.FoodItems on soberFood.Users.id = soberFood.FoodItems.userId' +
-	' where soberFood.Colleges.id = ' + colleges[i].id + ' and soberFood.FoodItems.Status' +
-	' = "EXPIRED";', null, { raw: true }) 		
 
-		list.push({name:college, eaten: eaten[0].num, wasted: wasted[0].num})
+	var results = yield si.query(
+		/*  'SELECT college.name AS cName, (select count(*) as num from soberFood.Colleges'
+		+ '  join soberFood.Users on soberFood.Users.CollegeId = soberFood.Colleges.id'
+		+ ' inner join soberFood.FoodItems on soberFood.Users.id = soberFood.FoodItems.userId'
+		+ ' where soberFood.Colleges.id = college.id'
+		+ ' and soberFood.FoodItems.Status = "EATEN") AS eaten,'
+		+ ' (select count(*) as num from soberFood.Colleges'
+		+ ' inner join soberFood.Users on soberFood.Users.CollegeId = soberFood.Colleges.id'
+		+ ' inner join soberFood.FoodItems on soberFood.Users.id = soberFood.FoodItems.userId'
+		+ ' where soberFood.Colleges.id = college.id'
+		+ ' and soberFood.FoodItems.Status = "EXPIRED") AS wasted,'
+		+ ' (SELECT wasted / (eaten + wasted + 1)) AS ratio'
+		+ ' FROM soberFood.Colleges AS college'
+		+ ' ORDER BY ratio DESC'
+		+ ' , null, { raw: true})'*/
+
+		'SELECT college.name AS cName, (select count(*) as num from soberFood.Colleges  join soberFood.Users on soberFood.Users.CollegeId = soberFood.Colleges.id inner join soberFood.FoodItems on soberFood.Users.id = soberFood.FoodItems.userId where soberFood.Colleges.id = college.id and soberFood.FoodItems.Status = "EATEN") AS eaten, (select count(*) as num from soberFood.Colleges inner join soberFood.Users on soberFood.Users.CollegeId = soberFood.Colleges.id inner join soberFood.FoodItems on soberFood.Users.id = soberFood.FoodItems.userId where soberFood.Colleges.id = college.id and soberFood.FoodItems.Status = "EXPIRED") AS wasted, (SELECT wasted / (eaten + wasted + 1)) AS ratio FROM soberFood.Colleges AS college ORDER BY ratio ASC'
+	, null, { raw: true })
+
+	for (var i = 0; i < results.length; i++) {
+		list.push({name:results[i].cName, eaten: results[i].eaten, wasted: results[i].wasted})
 	}
+
 
 	this.jsonResp(200, list);
 }
