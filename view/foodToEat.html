@@ -17,7 +17,8 @@
         <tr ng-repeat="item in itemsOnList">
           <td>[[item.name]]</td>
           <td>[[item.daysLeft]]</td>
-          <td><button ng-click="eat(item.id)" class="btn">Eat <i style="font-size:1.0em" class="glyphicon glyphicon-cutlery"></i></button><button style="margin-left: 10px;" ng-click="waste(item.id)" class="btn">Waste <i style="font-size:1.0em" class="glyphicon glyphicon-thumbs-down"></i></button></td>
+          <td><button ng-click="eat(item.id)" class="btn btn-success">Eat <i style="font-size:1.0em" class="glyphicon glyphicon-cutlery"></i></button><br>
+          <button style="margin-top: 5px;" ng-click="waste(item.id)" class="btn btn-danger">Waste <i style="font-size:1.0em" class="glyphicon glyphicon-thumbs-down"></i></button></td>
         </tr>
       </tbody>
     </table>
