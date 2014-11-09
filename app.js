@@ -24,14 +24,16 @@ var co = require('co')
 var User = require("./model/user");
 var FoodInfo = require("./model/foodInfo");
 var College = require("./model/college");
+var Post = require("./model/post");
 
 var foodItemCtrl = require("./controller/foodItem");
 var userCtrl = require("./controller/user");
 var collegeCtrl = require("./controller/college");
+var postCtrl = require("./controller/post");
 co(function*(){
     
     si = database.getSequelizeInstance()
-// yield si.sync({ force: true })
+//yield si.sync()
 // var FoodInfo = require("./model/foodInfo");
 // FoodInfo.create({name: "Bananas", shelfLifeDays: 10})
 // FoodInfo.create({name: "Tomatoes", shelfLifeDays: 10})
@@ -79,6 +81,7 @@ app.get('/shoppingList', defaultPageLoad('shoppingList', true))
 app.get('/foodToEat', defaultPageLoad('foodToEat', true))
 app.get('/statistics', defaultPageLoad('results', true))
 app.get('/standings', defaultPageLoad('standings', true))
+app.get('/postItBoard', defaultPageLoad('postItBoard', true))
 app.get('/leaderboard', defaultPageLoad('leaderboard', true))
 app.get('/about', defaultPageLoad('about'))
 app.get(/\/public\/*/, serve('.'))
@@ -92,6 +95,8 @@ app.get('/api/user/pantry', userCtrl.getPantry)
 app.get('/api/user/statistics', userCtrl.getStatistics)
 app.get('/api/user/leaderboard', userCtrl.getLeaderboard)
 app.get('/api/college/statistics', collegeCtrl.getStatistics)
+app.post('/api/post', postCtrl.add)
+app.get('/api/post', postCtrl.get)
 
 
 app.get('/api/foodInfo', function*(){
