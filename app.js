@@ -23,6 +23,7 @@ var co = require('co')
 
 var User = require("./model/user");
 var FoodInfo = require("./model/foodInfo");
+var College = require("./model/college");
 
 var foodItemCtrl = require("./controller/foodItem");
 var userCtrl = require("./controller/user");
@@ -113,7 +114,11 @@ app.get('/api/logout', function * () {
     this.redirect('/')
 })
 app.post('/api/createAccount', function * () {
+    console.log(this.request.body)
+    var college = yield College.findOne({where: {name: this.request.body.college}})
+    var errCause=college.blah;
     var user = yield User.createEncrypted(this.request.body);
+    yield college.addUser(user)
     this.session.userId = user.id;
     this.jsonResp(200)
 })
