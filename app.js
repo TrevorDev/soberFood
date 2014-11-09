@@ -25,10 +25,11 @@ var User = require("./model/user");
 var FoodInfo = require("./model/foodInfo");
 
 var foodItemCtrl = require("./controller/foodItem");
+var userCtrl = require("./controller/user");
 co(function*(){
     
     si = database.getSequelizeInstance()
-
+// yield si.sync({ force: true })
 // var FoodInfo = require("./model/foodInfo");
 // FoodInfo.create({name: "Bananas", shelfLifeDays: 10})
 // FoodInfo.create({name: "Tomatoes", shelfLifeDays: 10})
@@ -41,7 +42,7 @@ co(function*(){
 // FoodInfo.create({name: "Orange Juice", shelfLifeDays: 21})
 // FoodInfo.create({name: "Chicken breast", shelfLifeDays: 2})
 // FoodInfo.create({name: "Turkey - From Deli Counter", shelfLifeDays: 3})
-    //yield si.sync({ force: true })
+    
     // var User = require("./model/user");
     // var College = require("./model/college");
     // var FoodInfo = require("./model/foodInfo");
@@ -73,15 +74,22 @@ app.use(router(app))
 //DEFAULTS
 app.get('/', defaultPageLoad('index'))
 app.get('/shoppingList', defaultPageLoad('shoppingList', true))
+app.get('/foodToEat', defaultPageLoad('foodToEat', true))
 app.get(/\/public\/*/, serve('.'))
 
 app.post('/api/foodItem', foodItemCtrl.add)
-app.get('/api/foodItem', foodItemCtrl.add)
+app.delete('/api/foodItem/:id', foodItemCtrl.delete)
+app.put('/api/foodItem/eat/:id', foodItemCtrl.eat)
+app.put('/api/foodItem/waste/:id', foodItemCtrl.waste)
+app.get('/api/user/list', userCtrl.getList)
+app.get('/api/user/pantry', userCtrl.getPantry)
 
 app.get('/api/foodInfo', function*(){
     var ret = yield FoodInfo.findAll();
     this.jsonResp(200, ret)
 })
+
+app.put('/api/user/addToFoodToEat', userCtrl.addToFoodToEat);
 
 app.post('/api/login', function*(){
     var name = this.request.body.name;

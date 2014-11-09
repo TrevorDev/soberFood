@@ -2,33 +2,25 @@
 {% block body %}
 <div class="container-wide" ng-controller="homeCtrl">
 	<div style="width:100%">
-	<form id="foodForm">
-	<input list="foodItems" id="foodItem" autocomplete="off">
-	<datalist id="foodItems">
-		<option  data-ng-repeat="item in foodItems" label="[[item.shelfLifeDays]] days" value="[[item.name]]">
-	</datalist>
-	<input type="submit">
-	</form>
-	</div>
-	<h1>Your list!</h1>
+	
+	<h1>Your Pantry!</h1>
 
 	<table class="table table-striped">
       <thead>
         <tr>
           <th>Name</th>
-          <th>Shelf Life</th>
+          <th>Days Left</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr ng-repeat="item in itemsOnList">
           <td>[[item.name]]</td>
-          <td>[[item.shelfLifeDays]]</td>
-          <td><button ng-click="delete(item.id)" class="btn">Remove <i style="font-size:1.0em" class="glyphicon glyphicon-trash"></i></button></td>
+          <td>[[item.daysLeft]]</td>
+          <td><button ng-click="eat(item.id)" class="btn">Eat <i style="font-size:1.0em" class="glyphicon glyphicon-cutlery"></i></button><button style="margin-left: 10px;" ng-click="waste(item.id)" class="btn">Waste <i style="font-size:1.0em" class="glyphicon glyphicon-thumbs-down"></i></button></td>
         </tr>
       </tbody>
     </table>
-    <button class="btn" ng-click="addToFoodToEat(item.id)">Add all items to food to eat</button>
 </div>
 {% endblock %}
 
@@ -40,21 +32,18 @@ function homeCtrl($scope, $http) {
 	$scope.itemsOnList = []
 
 	$.ajax({
-        url: "/api/foodInfo",
-        method: "Get",
-        success: function(resp) {
-        	$scope.foodItems = (resp.data)
-        	$scope.$apply();
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-        },
-      })
-
-	$.ajax({
-        url: "/api/user/list",
+        url: "/api/user/pantry",
         method: "Get",
         success: function(resp) {
         	$scope.itemsOnList = (resp.data)
+        	$.each($scope.itemsOnList, function(id, elem){
+        		var x = new Date();
+        		x.setMilliseconds(0)
+				x.setSeconds(0)
+				x.setMinutes(0)
+				x.setHours(0)
+        		elem.daysLeft = elem.shelfLifeDays - ((x - new Date(elem.timePurchased))/(1000*60*60*24))
+        	})
         	$scope.$apply();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -86,15 +75,38 @@ function homeCtrl($scope, $http) {
 	      })
 	})
 
-	$scope.delete = function(id){
+	$scope.eat = function(id){
 		$.ajax({
-	        url: "/api/foodItem/"+id,
-	        method: "Delete",
+	        url: "/api/foodItem/eat/"+id,
+	        method: "Put",
 	        success: function(resp) {
 	        	$scope.itemsOnList = $.grep($scope.itemsOnList, function(elem){
 	        		console.log(elem)
 	        		if(elem.id == id){
 	        			console.log("remove")
+	        			return false;
+	        		}else{
+	        			return true;
+	        		}
+	        	})
+	        	$scope.$apply();
+	        },
+	        error: function(XMLHttpRequest, textStatus, errorThrown) {
+	        	console.log("err")
+	        },
+	      })
+		console.log(id)
+	}
+
+
+	$scope.waste = function(id){
+		$.ajax({
+	        url: "/api/foodItem/waste/"+id,
+	        method: "Put",
+	        success: function(resp) {
+	        	$scope.itemsOnList = $.grep($scope.itemsOnList, function(elem){
+	        		console.log(elem)
+	        		if(elem.id == id){
 	        			return false;
 	        		}else{
 	        			return true;
