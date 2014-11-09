@@ -79,7 +79,7 @@ app.get('/shoppingList', defaultPageLoad('shoppingList', true))
 app.get('/foodToEat', defaultPageLoad('foodToEat', true))
 app.get('/statistics', defaultPageLoad('results', true))
 app.get('/standings', defaultPageLoad('standings', true))
-app.get('/about', defaultPageLoad('about', true))
+app.get('/about', defaultPageLoad('about'))
 app.get(/\/public\/*/, serve('.'))
 
 app.post('/api/foodItem', foodItemCtrl.add)
