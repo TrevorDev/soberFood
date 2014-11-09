@@ -22,8 +22,6 @@ exports.getStatistics = function *() {
 	' where soberFood.Colleges.id = ' + colleges[i].id + ' and soberFood.FoodItems.Status' +
 	' = "EXPIRED";', null, { raw: true }) 		
 
-		console.log(eaten);
-		console.log(eaten[0].num)
 		list.push({name:college, eaten: eaten[0].num, wasted: wasted[0].num})
 	}
 

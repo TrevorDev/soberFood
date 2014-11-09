@@ -28,7 +28,7 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn" ng-click="addToFoodToEat(item.id)">Add all items to food to eat</button>
+    <button class="btn btn-primary" ng-click="addToFoodToEat(item.id)">Add all items to food to eat</button>
 </div>
 {% endblock %}
 
@@ -116,8 +116,9 @@ function homeCtrl($scope, $http) {
 	        url: "/api/User/addToFoodToEat",
 	        method: "Put",
 	        success: function(resp) {
-	        	$scope.itemsOnList = [];
-	        	$scope.$apply();
+	        	//$scope.itemsOnList = [];
+	        	//$scope.$apply();
+	        	window.location = "/foodToEat"
 	        },
 	        error: function(XMLHttpRequest, textStatus, errorThrown) {
 	        	console.log("err")
