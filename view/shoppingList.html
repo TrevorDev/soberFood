@@ -3,7 +3,7 @@
 <div class="container-wide" ng-controller="homeCtrl">
 	<div style="width:100%">
 	<form id="foodForm">
-	<input list="foodItems" id="foodItem">
+	<input list="foodItems" id="foodItem" autocomplete="off">
 	<datalist id="foodItems">
 		<option  data-ng-repeat="item in foodItems" label="[[item.shelfLifeDays]] days" value="[[item.name]]">
 	</datalist>
@@ -43,7 +43,6 @@ function homeCtrl($scope, $http) {
         method: "Get",
         success: function(resp) {
         	$scope.foodItems = (resp.data)
-        	console.log($scope.foodItems)
         	$scope.$apply();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -64,7 +63,6 @@ function homeCtrl($scope, $http) {
 	        method: "Post",
 	        data: item,
 	        success: function(resp) {
-	        	console.log("success")
 	        	$scope.itemsOnList.push(item);
 				console.log($scope.itemsOnList)
 				$scope.$apply();

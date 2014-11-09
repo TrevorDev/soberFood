@@ -76,6 +76,7 @@ app.get('/shoppingList', defaultPageLoad('shoppingList', true))
 app.get(/\/public\/*/, serve('.'))
 
 app.post('/api/foodItem', foodItemCtrl.add)
+app.get('/api/foodItem', foodItemCtrl.add)
 
 app.get('/api/foodInfo', function*(){
     var ret = yield FoodInfo.findAll();

@@ -6,7 +6,7 @@ var STATUS = {
 	ON_LIST: "ON_LIST",
 	DELETED: "DELETED",
 	EATEN: "EATEN",
-	EXPIRED: "PENDING_APPROVAL"
+	EXPIRED: "EXPIRED"
 }
 
 var FoodItem = si.define('FoodItem', 
@@ -14,7 +14,11 @@ var FoodItem = si.define('FoodItem',
 	  actualShelfLife: sequelize.INTEGER,
 	  timePurchased: sequelize.DATE,
 	  timeConsumed: sequelize.DATE,
-	  status: [STATUS.ON_LIST ,STATUS.DELETED ,STATUS.EATEN ,STATUS.EXPIRED]
+	  status: {
+			type: sequelize.ENUM,
+			values: [STATUS.ON_LIST ,STATUS.DELETED ,STATUS.EATEN ,STATUS.EXPIRED],
+			defaultValue: STATUS.ON_LIST
+		}
 	}, {
 		classMethods: {
 
@@ -24,5 +28,5 @@ var FoodItem = si.define('FoodItem',
 		}
 	}
 )
-
+FoodItem.STATUS = STATUS;
 module.exports = FoodItem;
