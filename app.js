@@ -82,6 +82,7 @@ app.get('/foodToEat', defaultPageLoad('foodToEat', true))
 app.get('/statistics', defaultPageLoad('results', true))
 app.get('/standings', defaultPageLoad('standings', true))
 app.get('/postItBoard', defaultPageLoad('postItBoard', true))
+app.get('/leaderboard', defaultPageLoad('leaderboard', true))
 app.get('/about', defaultPageLoad('about'))
 app.get(/\/public\/*/, serve('.'))
 
@@ -92,9 +93,11 @@ app.put('/api/foodItem/waste/:id', foodItemCtrl.waste)
 app.get('/api/user/list', userCtrl.getList)
 app.get('/api/user/pantry', userCtrl.getPantry)
 app.get('/api/user/statistics', userCtrl.getStatistics)
+app.get('/api/user/leaderboard', userCtrl.getLeaderboard)
 app.get('/api/college/statistics', collegeCtrl.getStatistics)
 app.post('/api/post', postCtrl.add)
 app.get('/api/post', postCtrl.get)
+
 
 app.get('/api/foodInfo', function*(){
     var ret = yield FoodInfo.findAll();
