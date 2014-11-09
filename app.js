@@ -75,6 +75,7 @@ app.use(router(app))
 app.get('/', defaultPageLoad('index'))
 app.get('/shoppingList', defaultPageLoad('shoppingList', true))
 app.get('/foodToEat', defaultPageLoad('foodToEat', true))
+app.get('/statistics', defaultPageLoad('results', true))
 app.get(/\/public\/*/, serve('.'))
 
 app.post('/api/foodItem', foodItemCtrl.add)
@@ -83,6 +84,7 @@ app.put('/api/foodItem/eat/:id', foodItemCtrl.eat)
 app.put('/api/foodItem/waste/:id', foodItemCtrl.waste)
 app.get('/api/user/list', userCtrl.getList)
 app.get('/api/user/pantry', userCtrl.getPantry)
+app.get('/api/user/statistics', userCtrl.getStatistics)
 
 app.get('/api/foodInfo', function*(){
     var ret = yield FoodInfo.findAll();

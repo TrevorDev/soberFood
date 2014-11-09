@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="container-wide" ng-controller="homeCtrl">
+	<div style="width:100%">
+	
+	<h1>Your Pantry!</h1>
+
+	<table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Statistic</th>
+          <th>Total Eaten</th>
+          <th>Total Wasted</th>
+          <th>Percentage Wasted</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in itemsOnList">
+          <td>[[item.name]]</td>
+          <td>[[item.eaten]]</td>
+          <td>[[item.wasted]]</td>
+          <td>[[item.percentage]]%</td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+function homeCtrl($scope, $http) {
+	$scope.foodItems = [];
+	$scope.itemsOnList = [];
+
+	$.ajax({
+        url: "/api/user/statistics",
+        method: "Get",
+        success: function(resp) {
+        	console.log(resp)
+        	$scope.itemsOnList = (resp.data)
+        	$.each($scope.itemsOnList, function(index, elem) {
+        		elem.percentage = Math.round((elem.wasted / (elem.eaten + elem.wasted)) * 1000) / 10;
+        	})
+        	$scope.$apply();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+        },
+      })
+}
+</script>
+{% endblock %}

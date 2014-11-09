@@ -34,3 +34,13 @@ exports.addToFoodToEat = function*() {
 	}
 	this.jsonResp(200);
 }
+
+exports.getStatistics = function*() {
+	var curUser = yield User.find(this.session.userId)
+	var wasted = yield curUser.getFoodItems({where: {status: FoodItem.STATUS.EXPIRED}})
+	var eaten = yield curUser.getFoodItems({where: {status: FoodItem.STATUS.EATEN}})
+	var list = [];
+
+	list.push({name: "Overall", eaten: eaten.length, wasted: wasted.length});
+	this.jsonResp(200, list);
+}
