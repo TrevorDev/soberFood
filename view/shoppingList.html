@@ -63,13 +63,19 @@ function homeCtrl($scope, $http) {
 
 	$("#foodForm").on("submit", function(data, other) {
 		var item;
+		var found = false;
 		for(var i = 0;i<$scope.foodItems.length;i++){
 			if($scope.foodItems[i].name == $("#foodItem").val()){
 				item = $scope.foodItems[i];
 				item = {name: item.name, shelfLifeDays: item.shelfLifeDays, amount: 1, foodInfoId: item.id}
+				found = true;
 				break;
 			}
 		}
+		if (!found) {
+			return;
+		}
+
 		$("#foodItem").val('')
 		$.ajax({
 	        url: "/api/foodItem",
