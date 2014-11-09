@@ -2,18 +2,33 @@
 {% block body %}
 <div class="container-wide" ng-controller="homeCtrl">
 	<div style="width:100%">
-	<form action="demo_form.asp" method="get">
-	<input list="foodItems" name="foodItem">
+	<form id="foodForm">
+	<input list="foodItems" id="foodItem">
 	<datalist id="foodItems">
-		<option  data-ng-repeat="ttl in foodItems" value="[[ttl]]">
+		<option  data-ng-repeat="item in foodItems" label="[[item.shelfLifeDays]] days" value="[[item.name]]">
 	</datalist>
 	<input type="submit">
 	</form>
 	</div>
-	<h1>HELLO WORLD!</h1>
-	<div ng-repeat="item in project">
-		[[item]]
-	</div>
+	<h1>Your list!</h1>
+
+	<table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Shelf Life</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in itemsOnList">
+          <td>[[item.name]]</td>
+          <td>[[item.shelfLifeDays]]</td>
+          <td>[[item.amount]]</td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn">Add all items to food to eat</button>
 </div>
 {% endblock %}
 
@@ -21,7 +36,45 @@
 <script type="text/javascript">
 function homeCtrl($scope, $http) {
 	$scope.project = ["Hello", "World", "!"];
-	$scope.foodItems = ["Bananas", "Tomatoes", "Milk", "White Bread", "Apples", "Breakfast Cereal", "Potatoes", "Eggs", "Orange Juice", "Chicken breast", "Turkey from Deli Counter"]
+	$scope.foodItems = []
+	$scope.itemsOnList = []
+	$.ajax({
+        url: "/api/foodInfo",
+        method: "Get",
+        success: function(resp) {
+        	$scope.foodItems = (resp.data)
+        	console.log($scope.foodItems)
+        	$scope.$apply();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+        },
+      })
+
+	$("#foodForm").on("submit", function(data, other) {
+		var item;
+		for(var i = 0;i<$scope.foodItems.length;i++){
+			if($scope.foodItems[i].name == $("#foodItem").val()){
+				item = $scope.foodItems[i];
+				item = {name: item.name, shelfLifeDays: item.shelfLifeDays, amount: 1, foodInfoId: item.id}
+				break;
+			}
+		}
+		$.ajax({
+	        url: "/api/foodItem",
+	        method: "Post",
+	        data: item,
+	        success: function(resp) {
+	        	console.log("success")
+	        	$scope.itemsOnList.push(item);
+				console.log($scope.itemsOnList)
+				$scope.$apply();
+	        },
+	        error: function(XMLHttpRequest, textStatus, errorThrown) {
+	        	console.log("err")
+	        },
+	      })
+	})
+	// $scope.foodItems = ["Bananas", "Tomatoes", "Milk", "White Bread", "Apples", "Breakfast Cereal", "Potatoes", "Eggs", "Orange Juice", "Chicken breast", "Turkey from Deli Counter"]
 }
 </script>
 {% endblock %}

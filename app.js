@@ -22,6 +22,9 @@ var co = require('co')
 //Add database
 
 var User = require("./model/user");
+var FoodInfo = require("./model/foodInfo");
+
+var foodItemCtrl = require("./controller/foodItem");
 co(function*(){
     
     si = database.getSequelizeInstance()
@@ -71,6 +74,13 @@ app.use(router(app))
 app.get('/', defaultPageLoad('index'))
 app.get('/shoppingList', defaultPageLoad('shoppingList', true))
 app.get(/\/public\/*/, serve('.'))
+
+app.post('/api/foodItem', foodItemCtrl.add)
+
+app.get('/api/foodInfo', function*(){
+    var ret = yield FoodInfo.findAll();
+    this.jsonResp(200, ret)
+})
 
 app.post('/api/login', function*(){
     var name = this.request.body.name;
