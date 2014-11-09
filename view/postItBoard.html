@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="container-wide" ng-controller="homeCtrl">
+	<h2 style="width:100%;text-align:center;">
+		Shared Info
+	</h2>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="well" style="padding-bottom: 50px;">
+		        <form id="post" class="form-signin">		            
+		            <textarea data-provide="limit" style="padding-right: 15px;width:100%;" data-counter="#counter" placeholder="How do you stop food waste..." rows="3" name="text"></textarea>
+		            <em id="counter"></em>
+
+		            <button class="pull-right btn" type="submit">
+		                Post
+		            </button>
+		        </form>
+		    </div>
+
+		    <div class="well" ng-repeat="item in posts">
+		    	<td>[[item.text]]</td>
+		    </div>
+	    </div>
+	</div>
+	
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+function homeCtrl($scope, $http) {
+	$scope.posts = []
+	$.ajax({
+        url: "/api/post",
+        method: "Get",
+        success: function(resp) {
+        	$scope.posts = resp.data
+        	$scope.$apply();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+        },
+      })
+
+	$("#post").on("submit", function(data, other) {
+		$.ajax({
+        url: "/api/post",
+        method: "Post",
+        data: $('#post').serialize(),
+        success: function(resp) {
+        	console.log(resp)
+        	$scope.$apply();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+        },
+      })
+	})
+}
+</script>
+{% endblock %}
