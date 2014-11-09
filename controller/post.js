@@ -11,6 +11,6 @@ exports.add = function *() {
 }
 
 exports.get = function *() {
-	var posts = yield Post.findAll({order: "createdAt DESC"});
+	var posts = yield Post.findAll({where: {status: Post.STATUS.ACTIVE}, order: "createdAt DESC"});
 	this.jsonResp(200, posts);
 }

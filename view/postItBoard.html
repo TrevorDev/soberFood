@@ -48,8 +48,7 @@ function homeCtrl($scope, $http) {
         method: "Post",
         data: $('#post').serialize(),
         success: function(resp) {
-        	console.log(resp)
-        	$scope.$apply();
+        	location.reload();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
         },
